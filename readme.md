@@ -1,71 +1,38 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+Usando Laravel 5.8
+1. Creación de un panel administrativo usando AdminLTE (https://adminlte.io/)  ---- listo se creo el panel con la misma plantilla modificando algunas cosas.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+2. Creación Básica de Laravel Auth con la habiliad de logearte como administrador ==== listo ya se puede loguear como administrador
 
-## About Laravel
+3. Usar database seeds para crear el primer usario con email admin@admin.com y el password "password"  --- listo usuario ADMNISTRADOR admin@admin.com Y password 12356
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+4. Creación de un CRUD (Crear, Leer, Actualizar, Eliminar) para dos tablas relacionadas productos y categorías
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+5. La tabla de productos debe tener Nombre (Requerido), descripción, imagen (Mínimo 300 x 300), precio (Requerido), descuento y una llave foranea con el id de la categoría (Requerida)  ---- listo ya estan requeridos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+6. La tabla de categorías debe tener Nombre (Requerido) y descripción  ----- listo ya estan requeridos
 
-## Learning Laravel
+7. Estas dos tablas deben estar trabajadas desde migrations  ----- listo fueron creadas con migraciones
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+8. Store las imagenes de los productos en storage/app/public y hacerlos accessibles para el público
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost you and your team's skills by digging into our comprehensive video library.
+9. Usar Laravel resource controllers con los métodos index, create, store, etc ---- 
 
-## Laravel Sponsors
+10. Usar las validaciones de function y clasess Request
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+11. Usar paginancion mostrabdo los 10 primeros productos
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
+12. Use Laravel make:auth como tema de diseño predeterminado basado en Bootstrap, eliminar la capacidad de registrarse ---- listo solo se puede registrar cuando esta logueado como administrador
 
-## Contributing
+13. Enviar una notificación por email cuando un usario se logea  ---- listo ya se puede enviar enviar email cuando se logue solo hay que realizar la configuracion
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+14. Implementar el proyecto como multilenguaje usando resources/lang folder
 
-## Security Vulnerabilities
+15. Compartir el proyecto en GIthub (https://github.com/)   ---- listo ya fue subido el repositorio
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+16. Crear una vista en react o vue que liste los productos según las categorías creadas en el admin, cada producto dede mostrar su precio + igv y si existe descuento debe restarse al precio.
 
-## License
+17. Crear páginado para cada categoria de no mas de 5 productos
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+18. Cada lista debe tener un resumen que debe ser la suma de los precios de los productos incluido + igv
+
+Nota: Usar código propio para la solución, se calificará orden, organización, uso de MVC, Auth, CRUD, Eloquente y Relaciones, Migraciones, Validaciones de formularios, File manager, uso de Vue o React y paginaciones

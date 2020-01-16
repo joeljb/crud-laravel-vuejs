@@ -132,7 +132,7 @@
                         ref="descripcion_categoria" 
                         class="form-control" 
                         v-model="descripcion_categoria" 
-                        placeholder="Ingresar Categoria" 
+                        placeholder="Ingresar Descripción" 
                         v-validate="{ required: true}" 
                         :class="vdescripcion_categoria?{ 'is-invalid': errors.has('descripcion_categoria'), 'is-valid': !errors.has('descripcion_categoria')}:null" required @keyup="verificar('descripcion_categoria','descripcion_categoria')"
                      >
@@ -258,8 +258,8 @@
             if (accion=='REGISTRAR') {
                this.titulo='Crear Categoria'
                this.idCategoria = "";
-               this.nombreCategoria = "";
-               this.descripcionCategoria = "";
+               this.nombre_categoria = "";
+               this.descripcion_categoria = "";
 
                setTimeout(function(){
                   _this.vnombre_categoria=true;
@@ -348,7 +348,7 @@
                   }).catch(function (error) {
                      _this.registrandoCategoria = false;
                      _this.disabledRegistrando = true;
-                     _this.errors = error;
+                     _this.errorCategoria = error;
                      alert("A ocurrido un error.");
                   });
                }

@@ -15,11 +15,11 @@ Usando Laravel 5.8
 
 8. Store las imagenes de los productos en storage/app/public y hacerlos accessibles para el público
 
-9. Usar Laravel resource controllers con los métodos index, create, store, etc ---- 
+9. Usar Laravel resource controllers con los métodos index, create, store, etc ----  listo cree categoria y producto
 
-10. Usar las validaciones de function y clasess Request
+10. Usar las validaciones de function y clasess Request  listo  estoy usando las validaciones  clasess Request  y tambien hice la validacion de categoria con  Facades\Validator
 
-11. Usar paginancion mostrabdo los 10 primeros productos
+11. Usar paginancion mostrabdo los 10 primeros productos ---- listo ya esta el pagindo de productos
 
 12. Use Laravel make:auth como tema de diseño predeterminado basado en Bootstrap, eliminar la capacidad de registrarse ---- listo solo se puede registrar cuando esta logueado como administrador
 
@@ -28,6 +28,7 @@ Usando Laravel 5.8
 14. Implementar el proyecto como multilenguaje usando resources/lang folder
 
 15. Compartir el proyecto en GIthub (https://github.com/)   ---- listo ya fue subido el repositorio
+
 
 16. Crear una vista en react o vue que liste los productos según las categorías creadas en el admin, cada producto dede mostrar su precio + igv y si existe descuento debe restarse al precio.
 

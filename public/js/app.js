@@ -1966,8 +1966,8 @@ __webpack_require__.r(__webpack_exports__);
       if (accion == 'REGISTRAR') {
         this.titulo = 'Crear Categoria';
         this.idCategoria = "";
-        this.nombreCategoria = "";
-        this.descripcionCategoria = "";
+        this.nombre_categoria = "";
+        this.descripcion_categoria = "";
         setTimeout(function () {
           _this.vnombre_categoria = true;
 
@@ -2054,7 +2054,7 @@ __webpack_require__.r(__webpack_exports__);
           })["catch"](function (error) {
             _this.registrandoCategoria = false;
             _this.disabledRegistrando = true;
-            _this.errors = error;
+            _this.errorCategoria = error;
             alert("A ocurrido un error.");
           });
         }
@@ -2074,8 +2074,158 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2184,24 +2334,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   name: "productos",
   created: function created() {
     this.traerProductos(1, this.buscar);
+    this.traerCategorias();
   },
   mounted: function mounted() {},
   data: function data() {
-    var _ref;
-
-    return _ref = {
+    return {
       buscar: '',
+      titulo: '',
       arrayProductos: [],
-      id_usuario: '',
-      firmar: false,
-      mostrarFirmas: false,
-      firmas: {},
-      sigStyle: {
-        'border': '4px solid #444',
-        'border-radius': '15px',
-        'background-color': '#fafafa'
-      },
-      arrayUsuarios: [],
+      arrayCategorias: [],
+      mostrarModal: false,
+      nombre_producto: '',
+      precio: '',
+      descuento: '',
+      imagen: '',
+      descripcion_producto: '',
+      vdescripcion_producto: false,
+      vnombre_producto: false,
+      vid_categoria: false,
+      vprecio: false,
+      vdescuento: false,
+      vimagen: false,
       pagination: {
         'total': 0,
         'current_page': 0,
@@ -2211,37 +2364,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'to': 0
       },
       offset: 3,
-      nombreSede: '',
-      vNombreSede: false,
-      direccion: '',
-      vDireccion: false,
-      telefono: '',
-      vTelefono: false,
-      mostrarUsuario: false,
-      titulo: '',
-      id_sede: '',
-      tipo_documento: '',
-      dni: '',
-      buscandoUsuario: false,
-      value: '',
-      disabledBuscar: true,
-      registrandoUsuario: false
-    }, _defineProperty(_ref, "buscandoUsuario", false), _defineProperty(_ref, "mostrarDni", false), _defineProperty(_ref, "mostrarCampos", false), _defineProperty(_ref, "sedes", ''), _defineProperty(_ref, "usuarios", {
-      type: '',
-      dni: '',
-      nombre: '',
-      apellidos: '',
-      telefono_movil: '',
-      sedes: '',
-      email: '',
-      usuario: '',
-      password: '',
-      confir_password: '',
-      genero: '',
-      tipo: '',
-      especialidad: '',
-      colegiatura: ''
-    }), _defineProperty(_ref, "vespecialidad", false), _defineProperty(_ref, "vcolegiatura", false), _defineProperty(_ref, "vnombre", false), _defineProperty(_ref, "vapellidos", false), _defineProperty(_ref, "vtelefono_movil", false), _defineProperty(_ref, "vemail", false), _defineProperty(_ref, "vsedes", false), _defineProperty(_ref, "vtipo", false), _defineProperty(_ref, "vusuario", false), _defineProperty(_ref, "vpassword", false), _defineProperty(_ref, "vconfir_password", false), _defineProperty(_ref, "vgenero", false), _ref;
+      errorProducto: {},
+      id_categoria: ''
+    };
   },
   computed: {
     isActived: function isActived() {
@@ -2287,15 +2412,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         alert("A ocurrido un error.");
       });
     },
+    traerCategorias: function traerCategorias() {
+      var _this = this;
+
+      var url = '/categorias/traerCategoria';
+      axios.get(url).then(function (response) {
+        var respuesta = response.data;
+        console.log(respuesta);
+        _this.arrayCategorias = respuesta;
+      })["catch"](function (error) {
+        alert("A ocurrido un error.");
+      });
+    },
     cambiarPagina: function cambiarPagina(page, buscar) {
       var me = this; //Actualiza la pagina actual
 
       me.pagination.current_page = page; //Enviar la peticion para visualizar la data de esa página
 
-      me.traerUsuarios(page, buscar);
+      me.traerProductos(page, buscar);
     },
     verificar: function verificar(name, sig) {
       var t = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      console.log(sig);
 
       var _this = this;
 
@@ -2308,457 +2446,118 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    abrirModal: function abrirModal(titulo, item) {
-      console.log(item);
-
+    abrirModal: function abrirModal(accion, item) {
       var _this = this;
 
-      this.titulo = titulo;
-      this.mostrarUsuario = true;
+      this.mostrarModal = true;
 
-      if (titulo == 'Nuevo Usuario') {
-        this.id_sede = "";
-        this.nombreSede = "";
-        this.direccion = "";
-        this.telefono = "";
+      if (accion == 'REGISTRAR') {
+        this.titulo = 'Crear Producto';
+        this.idProducto = "";
+        this.id_categoria = "";
+        this.nombre_producto = "";
+        this.descripcion_producto = "";
         setTimeout(function () {
-          console.log(_this.$refs);
+          _this.vid_categoria = true;
 
-          _this.$refs.tipo_documento.focus();
+          _this.$validator.validate('id_categoria');
+
+          _this.$refs.id_categoria.focus();
         }, 500);
       } else {
-        this.nombreSede = item.nombre_sede;
-        this.direccion = item.direccion_sede;
-        this.telefono = item.telefono_sede;
-        this.id_sede = item.id;
+        console.log;
+        this.titulo = 'Actulizar Producto';
+        this.idProducto = item.id;
+        this.nombre_producto = item.nombre_producto;
+        this.descripcion_producto = item.descripcion_producto;
+        _this.vnombre_producto = true;
+        _this.vdescripcion_producto = true;
+
+        _this.$validator.validate();
       }
     },
     cerrarModal: function cerrarModal() {
+      this.idProducto = "";
+      this.nombre_producto = "";
+      this.descripcion_producto = "";
+      this.mostrarModal = false;
       this.titulo = "";
-      this.nombreSede = "";
-      this.direccion = "";
-      this.telefono = "";
-      this.id_sede = "";
-      this.mostrarUsuario = false;
-      this.usuarios = {
-        type: '',
-        dni: '',
-        nombre: '',
-        apellidos: '',
-        telefono_movil: '',
-        sedes: '',
-        email: '',
-        usuario: '',
-        password: '',
-        confir_password: '',
-        genero: '',
-        tipo: '',
-        especialidad: '',
-        colegiatura: ''
-      };
-      this.vespecialidad = false;
-      this.vcolegiatura = false;
-      this.vnombre = false;
-      this.vapellidos = false;
-      this.vtelefono_movil = false;
-      this.vemail = false;
-      this.vsedes = false;
-      this.vtipo = false;
-      this.vusuario = false;
-      this.vpassword = false;
-      this.vconfir_password = false;
-      this.vgenero = false;
-      this.mostrarDni = false;
-      this.mostrarCampos = false;
+      this.vdescripcion_producto = false;
+      this.vnombre_producto = false;
+      this.vid_categoria = false;
+      this.vprecio = false;
+      this.vdescuento = false;
+      this.vimagen = false;
     },
-    guardarUsuario: function guardarUsuario() {
+    eliminarProducto: function eliminarProducto(id) {
+      var _this = this;
+
+      if (confirm("Seguro que se puede eliminar el Producto?")) {
+        axios["delete"]("/productos/".concat(id)).then(function (response) {
+          if (!response.data.success) {
+            alert(response.data.error);
+          } else {
+            alert(response.data.data);
+
+            _this.traerProductos(1, '');
+          }
+        })["catch"](function (error) {
+          alert("A ocurrido un error.");
+        });
+      }
+    },
+    guardarProducto: function guardarProducto() {
       var _this = this;
 
       this.$validator.validate().then(function (valid) {
-        _this.vespecialidad = true;
-        _this.vcolegiatura = true;
-        _this.vnombre = true;
-        _this.vapellidos = true;
-        _this.vtelefono_movil = true;
-        _this.vemail = true;
-        _this.vsedes = true;
-        _this.vtipo = true;
-        _this.vusuario = true;
-        _this.vpassword = true;
-        _this.vconfir_password = true;
+        _this.vdescripcion_producto = true;
+        _this.vnombre_producto = true;
+        _this.vid_categoria = true;
+        _this.vprecio = true;
+        _this.vdescuento = true;
+        _this.vimagen = true;
+        _this.registrandoProducto = true;
+        _this.disabledRegistrando = true;
 
         if (valid) {
-          var formData = new FormData();
-          console.log(_this.$refs.foto.files);
+          var data = {
+            'nombre_producto': _this.nombre_producto,
+            'precio': _this.precio,
+            'descuento': _this.descuento,
+            'imagen': _this.imagen,
+            'descripcion_producto': _this.descripcion_producto,
+            'categoria_id': _this.id_categoria
+          };
+          var url = '/productos';
+          var method = 'POST'; //metodo para registrar 
 
-          if (_this.$refs.foto.files) {
-            formData.append('foto', _this.$refs.foto.files[0]);
-          } else {
-            formData.append('foto', _this.$refs.foto.files);
+          if (_this.idProducto) {
+            url = "/productos/".concat(_this.idProducto);
+            method = 'PUT'; //metodo para actualiar 
           }
 
-          formData.append('datos', JSON.stringify(_this.usuarios));
-          formData.append('id_usuario', _this.id_usuario);
-          alert(_this.id_usuario);
-
-          if (_this.id_usuario) {
-            var url = '/ajax/usuarios/editar_usuarios';
-          } else {
-            var url = '/ajax/usuarios/crear_usuarios';
-          }
-
-          axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+          axios({
+            method: method,
+            url: url,
+            data: data
           }).then(function (response) {
-            console.log(response.data);
-
             if (!response.data.success) {
               alert(response.data.error);
             } else {
               _this.cerrarModal();
 
-              _this.traerUsuarios(1, '');
+              _this.traerProductos(1, '');
 
-              _this.usuarios = {
-                type: '',
-                dni: '',
-                nombre: '',
-                apellidos: '',
-                telefono_movil: '',
-                sedes: '',
-                email: '',
-                usuario: '',
-                password: '',
-                confir_password: '',
-                genero: '',
-                tipo: '',
-                especialidad: '',
-                colegiatura: ''
-              };
-              _this.vespecialidad = false;
-              _this.vcolegiatura = false;
-              _this.vnombre = false;
-              _this.vapellidos = false;
-              _this.vtelefono_movil = false;
-              _this.vemail = false;
-              _this.vsedes = false;
-              _this.vtipo = false;
-              _this.vusuario = false;
-              _this.vpassword = false;
-              _this.vconfir_password = false;
-              _this.vgenero = false;
-              _this.mostrarDni = false;
-              _this.mostrarCampos = false;
-              alert("Usuario creado");
+              alert(response.data.data);
             }
           })["catch"](function (error) {
-            _this.registrandoPaciente = false;
+            _this.registrandoProducto = false;
             _this.disabledRegistrando = true;
-            alert("Ah ocurrido un error.");
+            _this.errorProducto = error;
+            alert("A ocurrido un error.");
           });
         }
       });
-    },
-    buscarUsuario: function buscarUsuario() {
-      var _this = this;
-
-      this.usuarios.nombre = "";
-      this.usuarios.apellidos = "";
-      this.usuarios.telefono_movil = "";
-      this.usuarios.direccion = "";
-      this.buscandoUsuarios = true;
-      this.disabledBuscar = true;
-      var url = "/usuarios/ver/dni/".concat(this.usuarios.dni);
-      var urlConsulta = "/SunatPHP/consulta.php";
-      axios.get(url).then(function (response) {
-        var data = response.data;
-
-        if (data.dni) {
-          alert('Este DNI ya se encuentra registrado!');
-          _this.buscandoUsuario = false;
-          _this.disabledBuscar = false;
-          return;
-        }
-
-        if (_this.usuarios.dni.length == 11) {
-          $.ajax({
-            type: "POST",
-            url: '/SunatPHP/consulta.php',
-            dataType: "json",
-            data: {
-              nruc: _this.usuarios.dni.trim()
-            },
-            success: function success(respuesta) {
-              _this.mostrarCampos = true;
-
-              if (respuesta.success == true) {
-                var arrNombre = respuesta.result.RazonSocial.split(" ");
-                var nombres = "";
-                var apellidos = "";
-
-                for (var i = 0; i < arrNombre.length; i++) {
-                  if (i <= 1) {
-                    apellidos += ' ' + arrNombre[i];
-                  } else {
-                    nombres += ' ' + arrNombre[i];
-                  }
-                }
-
-                for (var item in respuesta) {
-                  var rasonsocial = respuesta[item].RazonSocial;
-                  var telefonos = respuesta[item].Telefono;
-                  var adress = respuesta[item].Direccion;
-                  var state = respuesta[item].Estado;
-                }
-
-                _this.usuarios.nombre = nombres;
-                _this.usuarios.apellidos = apellidos;
-                _this.usuarios.usuario = telefonos;
-                _this.buscandoUsuario = false;
-                _this.disabledBuscar = false;
-                _this.vnombre = true;
-                _this.vapellidos = true;
-                _this.vtelefono_movil = true;
-                _this.vusuario = true;
-
-                _this.$validator.validate("nombre");
-
-                _this.$validator.validate("apellidos");
-
-                _this.$validator.validate("telefono_movil");
-
-                _this.$validator.validate("usuario");
-
-                _this.$refs.usuario.focus();
-
-                return;
-              }
-
-              _this.buscandoUsuario = false;
-              _this.disabledBuscar = false;
-              _this.vnombre = true;
-
-              _this.$validator.validate("nombre");
-
-              _this.$refs.nombre.focus();
-            }
-          });
-        }
-
-        if (_this.usuarios.dni.length == 8) {
-          $.ajax({
-            type: "POST",
-            url: '/ReniecPHP/example/consulta.php',
-            dataType: "json",
-            data: {
-              ndni: _this.usuarios.dni.trim()
-            },
-            success: function success(respuesta) {
-              _this.mostrarCampos = true;
-
-              if (respuesta.success == true) {
-                console.log(respuesta);
-
-                if (respuesta.source == 'reniec') {
-                  var nombres = respuesta.result.Nombres;
-                  var apellidos = respuesta.result.apellidos;
-                }
-
-                if (respuesta.source == 'essalud') {
-                  var nombres = respuesta.result.Nombres;
-                  var apellidos = respuesta.result.ApellidoPaterno + " " + respuesta.result.ApellidoMaterno;
-                }
-
-                if (nombres.trim() != '' || apellidos.trim() != '') {
-                  _this.usuarios.nombre = nombres;
-                  _this.usuarios.apellidos = apellidos;
-                  _this.buscandoUsuario = false;
-                  _this.disabledBuscar = false;
-                  _this.vnombre = true;
-                  _this.vapellidos = true;
-                  _this.vfecha_nacimiento = true;
-                  setTimeout(function () {
-                    _this.$validator.validate("nombre");
-
-                    _this.$validator.validate("apellidos");
-
-                    _this.$validator.validate("telefono_movil");
-
-                    _this.$refs.telefono_movil.focus();
-                  }, 100);
-                  return;
-                } else {
-                  _this.buscandoUsuario = false;
-                  _this.disabledBuscar = false;
-                  _this.vnombre = true;
-                  setTimeout(function () {
-                    _this.$validator.validate("nombre");
-
-                    _this.$refs.nombre.focus();
-                  }, 100);
-                }
-              }
-            }
-          });
-        }
-      })["catch"](function (error) {
-        _this.buscandoUsuario = false;
-        _this.disabledBuscar = false;
-        alert("Ah ocurrido un error.");
-      });
-    },
-    verificarDni: function verificarDni() {
-      var _this = this;
-
-      this.$validator.validate('dni').then(function (valid) {
-        if (valid) {
-          _this.disabledBuscar = false;
-
-          if (_this.usuarios.type != 'dni') {
-            _this.mostrarCampos = true;
-            setTimeout(function () {
-              _this.vnombre = true;
-
-              _this.$refs.nombre.focus();
-
-              _this.$validator.validate("nombre");
-            }, 100);
-          } else {
-            _this.buscarUsuario();
-          }
-        } else {
-          _this.disabledBuscar = true;
-        }
-      });
-    },
-    mostrarCampoDni: function mostrarCampoDni() {
-      var _this = this;
-
-      if (this.usuarios.type == '') {
-        this.mostrarDni = false;
-      } else {
-        this.mostrarDni = true;
-      }
-
-      setTimeout(function () {
-        _this.verificarDni();
-
-        _this.$refs.dni.focus();
-      }, 100);
-    },
-    limpiarFirma: function limpiarFirma() {
-      this.$refs.signaturePad.clearSignature();
-      console.log(this.$refs.signaturePad); //this.$refs.signaturePad.clear();
-    },
-    firmarMostrar: function firmarMostrar(id, titulo) {
-      this.mostrarFirmas = true;
-    },
-    cerrarFirma: function cerrarFirma() {
-      this.mostrarFirmas = false;
-      this.$refs.signaturePad.clearSignature();
-    },
-    guardarFirma: function guardarFirma() {
-      var _this2 = this;
-
-      // console.log(this.$refs.signaturePad);
-      var _this = this;
-
-      var _this$$refs$signature = this.$refs.signaturePad.saveSignature(),
-          isEmpty = _this$$refs$signature.isEmpty,
-          data = _this$$refs$signature.data;
-
-      console.log(isEmpty);
-      console.log(data);
-
-      if (!isEmpty) {
-        var firmas = this.firmas;
-        firmas[this.id_consentimiento] = {
-          firma: data
-        };
-        var base64 = data;
-        fetch(base64).then(function (res) {
-          return res.blob();
-        }).then(function (blob) {
-          var formData = new FormData();
-          var file = new File([blob], "firma_" + _this2.id_consentimiento + "_" + _this2.id_paciente + ".jpeg");
-          formData.append('firma', file);
-          var url = "/usuario/subir/imagen-firma/";
-          axios.post(url, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }).then(function (response) {
-            console.log("response");
-            console.log(response);
-            console.log("response");
-
-            if (response.data.success) {
-              _this.cerrarFirma();
-            } else {
-              alert(response.data.error);
-            }
-          })["catch"](function (error) {
-            console.log(error);
-            alert("Ah ocurrido un error.");
-          });
-        });
-      } else {
-        alert("La firma no puede estar vacia");
-      }
-    },
-    verImg: function verImg(item) {
-      if (item.logo) {
-        return "/imagenes/imagenesUsuarios/" + item.logo;
-      }
-
-      if (item.genero == 'masculino') {
-        return "/img/medico1.png";
-      } else {
-        return "/img/medico2.png";
-      }
-    },
-    cambiarEstado: function cambiarEstado(estado, item, index) {
-      var url = "/usuario/cambiarEstado";
-
-      var _this = this;
-
-      var data = {
-        id: item.id,
-        estado: estado
-      };
-      axios.post(url, data).then(function (response) {
-        console.log(response);
-
-        if (response.data.success) {
-          var users = _this.arrayUsuarios;
-          console.log(users);
-          users[index].active = estado;
-          console.log(users);
-          _this.arrayUsuarios = users;
-        }
-      })["catch"](function (error) {
-        console.log(error);
-        alert("Ah ocurrido un error.");
-      });
-    },
-    EditarUsuario: function EditarUsuario(item) {
-      console.log(item);
-      this.mostrarUsuario = true;
-      this.id_usuario = item.id;
-      this.usuarios = {
-        dni: item.dni,
-        nombre: item.name,
-        telefono_movil: item.telefono,
-        sedes: item.sede_id,
-        email: item.email,
-        usuario: item.username,
-        genero: item.genero,
-        colegiatura: item.colegiatura,
-        especialidad: item.especialidad,
-        tipo: item.cop
-      };
     }
   }
 });
@@ -7327,7 +7126,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal-content{\n   width: 100% !important;\n   position: absolute !important;\n   height: auto;\n   margin: auto;\n}\n.mostrar_usuarios{\n   display: list-item !important;\n   opacity: 1 !important;\n   /*position: absolute !important;*/\n   background-color: #3c29297a !important;\n   overflow-x: hidden;\n   overflow-y: auto;\n   z-index: 1072;\n}\n.error{\n   border-color: #dc3545;\n}\n.error:focus{\n   border-color: #dc3545;\n   box-shadow:0 0 0 0.2rem rgba(40,167,69,.25);\n}\n.success{\n   border-color: #28a745;\n}\n.success:focus{\n   border-color: #28a745;\n   box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);\n}\n.form-control.is-invalid, .was-validated .form-control:invalid{\n    background-image: none;\n}\n.form-control.is-valid, .was-validated .form-control:valid{\n   background-image: none;\n}\n.mostrar_firma{\n   display: list-item !important;\n   opacity: 1 !important;\n   /*position: absolute !important;*/\n   background-color: #3c29297a !important;\n   overflow-x: hidden;\n   overflow-y: auto;\n   z-index: 1072;\n}\n", ""]);
+exports.push([module.i, "\n.modal-content{\n   width: 100% !important;\n   position: absolute !important;\n   height: auto;\n   margin: auto;\n}\n.mostrar_modal{\n   display: list-item !important;\n   opacity: 1 !important;\n   background-color: #3c29297a !important;\n   overflow-x: hidden;\n   overflow-y: auto;\n   z-index: 1072;\n}\n.error{\n   border-color: #dc3545;\n}\n.error:focus{\n   border-color: #dc3545;\n   box-shadow:0 0 0 0.2rem rgba(40,167,69,.25);\n}\n.success{\n   border-color: #28a745;\n}\n.success:focus{\n   border-color: #28a745;\n   box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);\n}\n.form-control.is-invalid, .was-validated .form-control:invalid{\n    background-image: none;\n}\n.form-control.is-valid, .was-validated .form-control:valid{\n   background-image: none;\n}\n\n", ""]);
 
 // exports
 
@@ -50382,7 +50181,7 @@ var render = function() {
                         attrs: {
                           type: "text",
                           name: "descripcion_categoria",
-                          placeholder: "Ingresar Categoria",
+                          placeholder: "Ingresar Descripción",
                           required: ""
                         },
                         domProps: { value: _vm.descripcion_categoria },
@@ -50608,29 +50407,24 @@ var render = function() {
                             attrs: { type: "button" },
                             on: {
                               click: function($event) {
-                                return _vm.abrirModal("Nuevo Producto")
+                                return _vm.abrirModal("REGISTRAR")
                               }
                             }
                           },
                           [
                             _c("img", {
                               attrs: {
-                                src: "/img/mas.png",
+                                src: "/images/mas.png",
                                 width: "14px",
                                 alt: ""
                               }
                             }),
-                            _vm._v(" Registrar Producto\n                     ")
+                            _vm._v(" Crear Producto\n                     ")
                           ]
                         )
                       ]
                     )
-                  ]),
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm.arrayProductos) +
-                      "\n               "
-                  )
+                  ])
                 ]
               ),
               _vm._v(" "),
@@ -50648,15 +50442,21 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", {
                           domProps: {
+                            textContent: _vm._s(
+                              producto.categoria.nombre_categoriaguardar
+                            )
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("td", {
+                          domProps: {
                             textContent: _vm._s(producto.nombre_producto)
                           }
                         }),
                         _vm._v(" "),
                         _c("td", {
                           domProps: {
-                            textContent: _vm._s(
-                              producto.categoria.nombre_categoria
-                            )
+                            textContent: _vm._s(producto.descripcion_producto)
                           }
                         }),
                         _vm._v(" "),
@@ -50670,11 +50470,43 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", {
                           domProps: {
-                            textContent: _vm._s(producto.Descripcion)
+                            textContent: _vm._s(producto.descripcion_producto)
                           }
                         }),
                         _vm._v(" "),
-                        _vm._m(3, true)
+                        _c("td", [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "btn-group",
+                              attrs: { role: "group" }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fa fa-pencil-alt text-success",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.abrirModal(
+                                      "ACTUALIZAR",
+                                      producto
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "fa fa-trash text-red",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.eliminarProducto(producto.id)
+                                  }
+                                }
+                              })
+                            ]
+                          )
+                        ])
                       ])
                     }),
                     0
@@ -50762,7 +50594,616 @@ var render = function() {
           ])
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        class: { mostrar_modal: _vm.mostrarModal },
+        attrs: { "aria-labelledby": "exampleModalCenterTitle" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-lg mt-5",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header p-3" }, [
+                _c("h5", {
+                  staticClass: "modal-title",
+                  attrs: { id: "exampleModalCenterTitle" },
+                  domProps: { textContent: _vm._s(_vm.titulo) }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: { click: _vm.cerrarModal }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Categoria")]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.id_categoria,
+                              expression: "id_categoria"
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: { required: true },
+                              expression: "{ required: true}"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: _vm.vid_categoria
+                            ? {
+                                "is-invalid": _vm.errors.has("id_categoria"),
+                                "is-valid": !_vm.errors.has("categoria")
+                              }
+                            : null,
+                          attrs: { name: "id_categoria", required: "" },
+                          on: {
+                            keyup: function($event) {
+                              return _vm.verificar(
+                                "id_categoria",
+                                "nombre_producto"
+                              )
+                            },
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.id_categoria = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                              function($event) {
+                                return _vm.verificar(
+                                  "id_categoria",
+                                  "nombre_producto"
+                                )
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("Seleccione Categoria...")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.arrayCategorias, function(categoria) {
+                            return _c("option", {
+                              domProps: {
+                                value: categoria.id,
+                                textContent: _vm._s(categoria.nombre_categoria)
+                              }
+                            })
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.has("id_categoria")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.first("id_categoria")
+                                )
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.id_categoria != null
+                        ? _c(
+                            "div",
+                            _vm._l(_vm.errorProducto.id_categoria, function(
+                              error
+                            ) {
+                              return _c("div", [
+                                _c("span", {
+                                  staticClass: "help-block text-danger",
+                                  domProps: { textContent: _vm._s(error) }
+                                })
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Nombre Producto")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nombre_producto,
+                            expression: "nombre_producto"
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true}"
+                          }
+                        ],
+                        ref: "nombre_producto",
+                        staticClass: "form-control",
+                        class: _vm.vnombre_producto
+                          ? {
+                              "is-invalid": _vm.errors.has("nombre_producto"),
+                              "is-valid": !_vm.errors.has("nombre_producto")
+                            }
+                          : null,
+                        attrs: {
+                          type: "text",
+                          name: "nombre_producto",
+                          placeholder: "Ingresar Nombre Producto",
+                          required: ""
+                        },
+                        domProps: { value: _vm.nombre_producto },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.verificar(
+                              "nombre_producto",
+                              "descripcion_producto"
+                            )
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nombre_producto = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("nombre_producto")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.first("nombre_producto")
+                                )
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.nombre_producto != null
+                        ? _c(
+                            "div",
+                            _vm._l(_vm.errorProducto.nombre_producto, function(
+                              error
+                            ) {
+                              return _c("div", [
+                                _c("span", {
+                                  staticClass: "help-block text-danger",
+                                  domProps: { textContent: _vm._s(error) }
+                                })
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Nombre Precio")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.precio,
+                            expression: "precio"
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true}"
+                          }
+                        ],
+                        ref: "precio",
+                        staticClass: "form-control",
+                        class: _vm.vprecio
+                          ? {
+                              "is-invalid": _vm.errors.has("precio"),
+                              "is-valid": !_vm.errors.has("precio")
+                            }
+                          : null,
+                        attrs: {
+                          type: "text",
+                          name: "precio",
+                          placeholder: "Ingresar Nombre Producto",
+                          required: ""
+                        },
+                        domProps: { value: _vm.precio },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.verificar(
+                              "precio",
+                              "descripcion_producto"
+                            )
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.precio = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("precio")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.first("precio"))
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.precio != null
+                        ? _c(
+                            "div",
+                            _vm._l(_vm.errorProducto.precio, function(error) {
+                              return _c("div", [
+                                _c("span", {
+                                  staticClass: "help-block text-danger",
+                                  domProps: { textContent: _vm._s(error) }
+                                })
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Nombre Precio")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.descuento,
+                            expression: "descuento"
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true}"
+                          }
+                        ],
+                        ref: "descuento",
+                        staticClass: "form-control",
+                        class: _vm.vdescuento
+                          ? {
+                              "is-invalid": _vm.errors.has("descuento"),
+                              "is-valid": !_vm.errors.has("descuento")
+                            }
+                          : null,
+                        attrs: {
+                          type: "text",
+                          name: "descuento",
+                          placeholder: "Ingresar Nombre Producto",
+                          required: ""
+                        },
+                        domProps: { value: _vm.descuento },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.verificar(
+                              "descuento",
+                              "descripcion_producto"
+                            )
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.descuento = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("descuento")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.first("descuento")
+                                )
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.descuento != null
+                        ? _c(
+                            "div",
+                            _vm._l(_vm.errorProducto.descuento, function(
+                              error
+                            ) {
+                              return _c("div", [
+                                _c("span", {
+                                  staticClass: "help-block text-danger",
+                                  domProps: { textContent: _vm._s(error) }
+                                })
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Descripción Producto")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.descripcion_producto,
+                            expression: "descripcion_producto"
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true}"
+                          }
+                        ],
+                        ref: "descripcion_producto",
+                        staticClass: "form-control",
+                        class: _vm.vdescripcion_producto
+                          ? {
+                              "is-invalid": _vm.errors.has(
+                                "descripcion_producto"
+                              ),
+                              "is-valid": !_vm.errors.has(
+                                "descripcion_producto"
+                              )
+                            }
+                          : null,
+                        attrs: {
+                          type: "text",
+                          name: "descripcion_producto",
+                          placeholder: "Ingresar Descripcion",
+                          required: ""
+                        },
+                        domProps: { value: _vm.descripcion_producto },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.verificar(
+                              "descripcion_producto",
+                              "descripcion_producto"
+                            )
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.descripcion_producto = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("descripcion_producto")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.first("descripcion_producto")
+                                )
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.descripcion_producto != null
+                        ? _c(
+                            "div",
+                            _vm._l(
+                              _vm.errorProducto.descripcion_producto,
+                              function(error) {
+                                return _c("div", [
+                                  _c("span", {
+                                    staticClass: "help-block text-danger",
+                                    domProps: { textContent: _vm._s(error) }
+                                  })
+                                ])
+                              }
+                            ),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
+                    },
+                    [
+                      _c("label", [_vm._v("Imagen")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.imagen,
+                            expression: "imagen"
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true}"
+                          }
+                        ],
+                        ref: "imagen",
+                        staticClass: "form-control",
+                        class: _vm.vimagen
+                          ? {
+                              "is-invalid": _vm.errors.has("imagen"),
+                              "is-valid": !_vm.errors.has("imagen")
+                            }
+                          : null,
+                        attrs: {
+                          type: "text",
+                          name: "imagen",
+                          placeholder: "Ingresar Descripcion",
+                          required: ""
+                        },
+                        domProps: { value: _vm.imagen },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.verificar("imagen", "imagen")
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.imagen = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("imagen")
+                        ? _c("div", [
+                            _c("span", {
+                              staticClass: "help-block text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.first("imagen"))
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.errorProducto.imagen != null
+                        ? _c(
+                            "div",
+                            _vm._l(_vm.errorProducto.imagen, function(error) {
+                              return _c("div", [
+                                _c("span", {
+                                  staticClass: "help-block text-danger",
+                                  domProps: { textContent: _vm._s(error) }
+                                })
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e()
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-danger",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: { click: _vm.cerrarModal }
+                  },
+                  [_vm._v(" Cerrar\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-success",
+                    attrs: { type: "button" },
+                    on: { click: _vm.guardarProducto }
+                  },
+                  [_vm._v("Crear\n            ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -50808,9 +51249,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { staticStyle: { width: "10px" } }, [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre Producto")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Categoria")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Productos")]),
         _vm._v(" "),
         _c("th", [_vm._v("Precio")]),
         _vm._v(" "),
@@ -50818,20 +51259,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Descripcion")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "40px" } }, [_vm._v("Label")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("div", { staticClass: "progress progress-xs" }, [
-        _c("div", {
-          staticClass: "progress-bar progress-bar-danger",
-          staticStyle: { width: "55%" }
-        })
+        _c("th", { staticStyle: { width: "40px" } }, [_vm._v("Acciones")])
       ])
     ])
   }

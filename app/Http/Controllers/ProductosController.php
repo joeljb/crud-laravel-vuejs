@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProducto;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use App\Producto;
 
 class ProductosController extends Controller
@@ -26,17 +29,35 @@ class ProductosController extends Controller
     {
         //
     }
-
-    /**
+   /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+   public function store(StoreProducto $request)
+   {
+      if(!\request()->ajax())  return abort(401);
+      try{
+         $producto = new Producto();
+
+         $producto->nombre_producto = $request->input('nombre_producto');
+         $producto->descripcion_producto = $request->input('descripcion_producto');
+         $producto->categoria_id = $request->input('categoria_id');
+         $producto->imagen = $request->input('imagen');
+         $producto->precio = $request->input('precio');
+         $producto->descuento = $request->input('descuento');
+
+         DB::transaction(function() use ($producto){
+            $producto->save();
+         });
+
+         return ["success" => true, "data"=>"Producto Creada"];
+
+      }catch (\Exception $e){
+         return abort(401,$e);
+      }
+   }
 
     /**
      * Display the specified resource.
@@ -67,9 +88,32 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreProducto $request, $id)
     {
-        //
+       if(!\request()->ajax())  return abort(401);
+       
+         try{
+            $producto = Producto::find($id);
+            if($producto){
+               $producto->nombre_producto = $request->input('nombre_producto');
+               $producto->precio = $request->input('precio');
+               $producto->descuento = $request->input('descuento');
+               $producto->imagen = $request->input('imagen');
+               $producto->descripcion_producto = $request->input('descripcion_producto');
+               $producto->categoria_id = $request->input('categoria_id');
+      
+               DB::transaction(function() use ($producto){
+                  $producto->save();
+               });
+
+               return ["success" => true, "data"=>"Producto Actualizado"];
+            }else{
+               return ["success" => false, "error"=>"Id del producto no encontrado"];
+            }
+
+         }catch (\Exception $e){
+               return abort(401,$e);
+         }
     }
 
     /**
@@ -78,36 +122,48 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+      public function destroy($id)
+      {
+         if(!\request()->ajax())  return abort(401);
+
+         try{
+
+            $producto = Producto::find($id);
+
+            if($producto){
+               $producto->delete();
+               return ["success" => true, "data"=>"Producto Eliminado"];
+            }else{
+               return ["success" => false, "error"=>"Id del producto no encontrado"];
+            }
+
+         }catch (\Exception $e){
+               return abort(401,$e);
+         }
+      }
    public function traer(Request $request)
-    {
-        if(!\request()->ajax())  return abort(401);
-        $buscar = $request->buscar;
+   {
+      if(!\request()->ajax())  return abort(401);
+      $buscar = $request->buscar;
 
-        if($buscar == ''){
-            $productos = Producto::with("categoria")->paginate(10);
-        }else{
-            $productos = Producto::with("categoria")
-               ->whereHas('categoria',function ($query) use ($buscar){
-                    $query->where('nombre_categoria','LIKE','%' . $buscar . '%');
-               })
-               ->orWhere('nombre_producto','LIKE','%' . $buscar . '%')
-               ->paginate(10);
-        }
+      if($buscar == ''){
+         $productos = Producto::with('categoria')->orderBy('id','DESC')->paginate(10);
+      }else{
+         $productos = Producto::with('categoria')->where('nombre_producto','LIKE','%' . $buscar . '%')
+         ->orderBy('id','DESC')
+         ->paginate(10);
+      }
 
-        return [
-            'pagination' =>[
-                'total' => $productos->total(),
-                'current_page' => $productos->currentPage(),
-                'per_page' => $productos->perPage(),
-                'last_page' => $productos->lastPage(),
-                'from' => $productos->firstItem(),
-                'to' => $productos->lastItem()
-            ],
-            'productos' => $productos
-        ];
-    }
+      return [
+         'pagination' =>[
+            'total' => $productos->total(),
+            'current_page' => $productos->currentPage(),
+            'per_page' => $productos->perPage(),
+            'last_page' => $productos->lastPage(),
+            'from' => $productos->firstItem(),
+            'to' => $productos->lastItem()
+         ],
+         'productos' => $productos
+      ];
+   }
 }

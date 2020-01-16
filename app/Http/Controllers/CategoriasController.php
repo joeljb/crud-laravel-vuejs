@@ -174,4 +174,9 @@ class CategoriasController extends Controller
          'categorias' => $categorias
       ];
    }
+   public function traerCategoria(Request $request)
+   {
+      if(!\request()->ajax())  return abort(401);
+      return Categoria::get();
+   }
 }

@@ -1,105 +1,257 @@
 <template>
+   <div>
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+         <div class="container-fluid">
+            <div class="row mb-2">
+               <div class="col-sm-6">
+                  <h1>Productos</h1>
+               </div>
+            <div class="col-sm-6">
+               <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">Productos</li>
+               </ol>
+            </div>
+         </div>
+         </div><!-- /.container-fluid -->
+      </section>
 
-<div>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Productos</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Productos</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Lista de productos</h3>
-              </div>
-               <div class="container" style="font-family: 'Questrial', sans-serif;">
-                  <div class="row">
-                     <div class="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7">
-                        <input type="text" class="form-control" id="" placeholder="Busqueda..."
-                        @keyup="traerProductos(1,buscar)" 
-                        v-model="buscar">
-                     </div>
-                     <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 text-right">
-                     <button type="button" style="background-color: #5DADE2;" class="btn btn-sm text-white" @click="abrirModal('Nuevo Producto')"><img src="/img/mas.png" width="14px" alt=""> Registrar Producto
-                     </button>
+      <!-- Main content -->
+      <section class="content">
+         <div class="container-fluid">
+         <div class="row">
+            <div class="col-md-12">
+               <div class="card">
+               <div class="card-header">
+                  <h3 class="card-title">Lista de productos</h3>
+               </div>
+                  <div class="container" style="font-family: 'Questrial', sans-serif;">
+                     <div class="row">
+                        <div class="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7">
+                           <input type="text" class="form-control" id="" placeholder="Busqueda..."
+                           @keyup="traerProductos(1,buscar)" 
+                           v-model="buscar">
+                        </div>
+                        <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 text-right">
+                        <button type="button" style="background-color: #5DADE2;" class="btn btn-sm text-white" @click="abrirModal('REGISTRAR')"><img src="/images/mas.png" width="14px" alt=""> Crear Producto
+                        </button>
+                        </div>
                      </div>
                   </div>
-            {{arrayProductos}}
+               <!-- /.card-header -->
+               <div class="card-body">
+                  <table class="table table-bordered">
+                     <thead>                  
+                        <tr>
+                           <th style="width: 10px">#</th>
+                           <th>Categoria</th>
+                           <th>Productos</th>
+                           <th>Precio</th>
+                           <th>Descuento</th>
+                           <th>Descripcion</th>
+                           <th style="width: 40px">Acciones</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                     <tr v-for="(producto, index) in arrayProductos">
+                        <td v-text="index+1"></td>
+                        <td v-text="producto.categoria.nombre_categoriaguardar"></td>
+                        <td v-text="producto.nombre_producto"></td>
+                        <td v-text="producto.descripcion_producto"></td>
+                        <td v-text="producto.precio"></td>
+                        <td v-text="producto.descuento"></td>
+                        <td v-text="producto.descripcion_producto"></td>
+                        <td>
+                           <div class="btn-group" role="group">
+                              
+                              <i class="fa fa-pencil-alt text-success" @click.prevent="abrirModal('ACTUALIZAR',producto)"></i>
+                              <i class="fa fa-trash text-red"  @click.prevent="eliminarProducto(producto.id)"></i>
+                           </div>
+                        </td>
+                     </tr>
+                     </tbody>
+                  </table>
                </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table class="table table-bordered">
-                  <thead>                  
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>Nombre Producto</th>
-                      <th>Categoria</th>
-                      <th>Precio</th>
-                      <th>Descuento</th>
-                      <th>Descripcion</th>
-                      <th style="width: 40px">Label</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
+               <!-- /.card-body -->
+               <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                     <li class="page-item" v-if="pagination.current_page > 1">
+                        <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar)">&laquo;</a>
+                     </li>
+                     <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
+                        <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar)" v-text="page"></a>
+                     </li>
+                     <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                        <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar)">&raquo;</a>
+                     </li>
                      
-                    <tr v-for="(producto, index) in arrayProductos">
-                      <td v-text="index+1"></td>
-                      <td v-text="producto.nombre_producto"></td>
-                      <td v-text="producto.categoria.nombre_categoria"></td>
-                      <td v-text="producto.precio"></td>
-                      <td v-text="producto.descuento"></td>
-                      <td v-text="producto.Descripcion"></td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                  <li class="page-item" v-if="pagination.current_page > 1">
-                     <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar)">&laquo;</a>
-                  </li>
-                  <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                     <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar)" v-text="page"></a>
-                  </li>
-                  <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                     <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar)">&raquo;</a>
-                  </li>
-                  
-                </ul>
-              </div>
-            </div>
-            <!-- /.card -->
+                  </ul>
+               </div>
+               </div>
+               <!-- /.card -->
 
-          <!-- /.col -->
+            <!-- /.col -->
+               </div>
+            </div>
+         </div>
+         <!-- /.row -->
+      </section>
+      <!-- /.content -->
+
+      <div class="modal fade" :class="{'mostrar_modal': mostrarModal}" aria-labelledby="exampleModalCenterTitle">
+         <div class="modal-dialog modal-lg mt-5" role="document">
+            <div class="modal-content">
+            <div class="modal-header p-3">
+               <h5 class="modal-title" id="exampleModalCenterTitle" v-text="titulo"></h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="cerrarModal">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Categoria</label>
+                     <select 
+                        class="form-control" 
+                        v-model="id_categoria" 
+                        name="id_categoria" 
+                        v-validate="{ required: true}" 
+                        :class="vid_categoria?{ 'is-invalid': errors.has('id_categoria'), 'is-valid': !errors.has('categoria')}:null" required @keyup="verificar('id_categoria','nombre_producto')"
+                         @change="verificar('id_categoria','nombre_producto')"
+                     >
+                        <option value="" >Seleccione Categoria...</option>
+                        <option v-for="categoria in arrayCategorias" :value="categoria.id" v-text="categoria.nombre_categoria"></option>
+                     </select>
+                     
+                     <div v-if="errors.has('id_categoria')">
+                        <span class="help-block text-danger" v-text="errors.first('id_categoria')"></span>
+                     </div>
+                     <div v-if="errorProducto.id_categoria != null">
+                        <div v-for="error in errorProducto.id_categoria">
+                           <span class="help-block text-danger" v-text="error"></span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Nombre Producto</label>
+                     <input 
+                        type="text" 
+                        name="nombre_producto" 
+                        ref="nombre_producto" 
+                        class="form-control" 
+                        v-model="nombre_producto" 
+                        placeholder="Ingresar Nombre Producto" 
+                        v-validate="{ required: true}" 
+                        :class="vnombre_producto?{ 'is-invalid': errors.has('nombre_producto'), 'is-valid': !errors.has('nombre_producto')}:null" required @keyup="verificar('nombre_producto','descripcion_producto')">
+                        <div v-if="errors.has('nombre_producto')">
+                           <span class="help-block text-danger" v-text="errors.first('nombre_producto')"></span>
+                        </div>
+                        <div v-if="errorProducto.nombre_producto != null">
+                           <div v-for="error in errorProducto.nombre_producto">
+                              <span class="help-block text-danger" v-text="error"></span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Nombre Precio</label>
+                     <input 
+                        type="text" 
+                        name="precio" 
+                        ref="precio" 
+                        class="form-control" 
+                        v-model="precio" 
+                        placeholder="Ingresar Nombre Producto" 
+                        v-validate="{ required: true}" 
+                        :class="vprecio?{ 'is-invalid': errors.has('precio'), 'is-valid': !errors.has('precio')}:null" required @keyup="verificar('precio','descripcion_producto')">
+                        <div v-if="errors.has('precio')">
+                           <span class="help-block text-danger" v-text="errors.first('precio')"></span>
+                        </div>
+                        <div v-if="errorProducto.precio != null">
+                           <div v-for="error in errorProducto.precio">
+                              <span class="help-block text-danger" v-text="error"></span>
+                           </div>
+                        </div>
+                  </div>
+                   <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Nombre Precio</label>
+                     <input 
+                        type="text" 
+                        name="descuento" 
+                        ref="descuento" 
+                        class="form-control" 
+                        v-model="descuento" 
+                        placeholder="Ingresar Nombre Producto" 
+                        v-validate="{ required: true}" 
+                        :class="vdescuento?{ 'is-invalid': errors.has('descuento'), 'is-valid': !errors.has('descuento')}:null" required @keyup="verificar('descuento','descripcion_producto')">
+                        <div v-if="errors.has('descuento')">
+                           <span class="help-block text-danger" v-text="errors.first('descuento')"></span>
+                        </div>
+                        <div v-if="errorProducto.descuento != null">
+                           <div v-for="error in errorProducto.descuento">
+                              <span class="help-block text-danger" v-text="error"></span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Descripción Producto</label>
+                     <input 
+                        type="text" 
+                        name="descripcion_producto" 
+                        ref="descripcion_producto" 
+                        class="form-control" 
+                        v-model="descripcion_producto" 
+                        placeholder="Ingresar Descripcion" 
+                        v-validate="{ required: true}" 
+                        :class="vdescripcion_producto?{ 'is-invalid': errors.has('descripcion_producto'), 'is-valid': !errors.has('descripcion_producto')}:null" required @keyup="verificar('descripcion_producto','descripcion_producto')"
+                     >
+                        <div v-if="errors.has('descripcion_producto')">
+                           <span class="help-block text-danger" v-text="errors.first('descripcion_producto')"></span>
+                        </div>
+                        <div v-if="errorProducto.descripcion_producto != null">
+                           <div v-for="error in errorProducto.descripcion_producto">
+                              <span class="help-block text-danger" v-text="error"></span>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
+                     <label>Imagen</label>
+                     <input 
+                        type="text" 
+                        name="imagen" 
+                        ref="imagen" 
+                        class="form-control" 
+                        v-model="imagen" 
+                        placeholder="Ingresar Descripcion" 
+                        v-validate="{ required: true}" 
+                        :class="vimagen?{ 'is-invalid': errors.has('imagen'), 'is-valid': !errors.has('imagen')}:null" required @keyup="verificar('imagen','imagen')"
+                     >
+                        <div v-if="errors.has('imagen')">
+                           <span class="help-block text-danger" v-text="errors.first('imagen')"></span>
+                        </div>
+                        <div v-if="errorProducto.imagen != null">
+                           <div v-for="error in errorProducto.imagen">
+                              <span class="help-block text-danger" v-text="error"></span>
+                           </div>
+                        </div>
+                  </div>
+               </div>
+
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" 
+                  @click="cerrarModal"> Cerrar
+               </button>
+               
+               <button type="button" class="btn btn-sm btn-success"
+                  @click="guardarProducto"
+               >Crear
+               </button>
+            </div>
             </div>
          </div>
       </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
-  </div>
+   </div>
 </template>
 
 <script>
@@ -107,6 +259,7 @@
       name: "productos",
       created(){
          this.traerProductos(1,this.buscar);
+         this.traerCategorias();
          
       },
       mounted(){
@@ -114,19 +267,21 @@
       data(){
          return{
             buscar:'',
+            titulo:'',
             arrayProductos:[],
-
-
-            id_usuario:'',
-            firmar:false,
-            mostrarFirmas:false,
-            firmas:{},
-            sigStyle: { 
-               'border': '4px solid #444',
-               'border-radius': '15px',
-               'background-color': '#fafafa'
-            },
-            arrayUsuarios:[],
+            arrayCategorias:[],
+            mostrarModal:false,
+            nombre_producto:'',
+            precio:'',
+            descuento:'',
+            imagen:'',
+            descripcion_producto:'',
+            vdescripcion_producto:false,
+            vnombre_producto:false,
+            vid_categoria:false,
+            vprecio:false,
+            vdescuento:false,
+            vimagen:false,
             pagination: {
                'total' : 0,
                'current_page' : 0,
@@ -136,56 +291,8 @@
                'to' : 0
             },
             offset: 3,
-            nombreSede: '',
-            vNombreSede:false,
-            direccion: '',
-            
-            vDireccion:false,
-            telefono: '',
-            vTelefono:false,
-            mostrarUsuario:false,
-            titulo:'',
-            id_sede:'',
-            tipo_documento:'',
-            dni:'',
-            buscandoUsuario:false,
-            value:'',
-            disabledBuscar:true,
-            registrandoUsuario:false,
-            buscandoUsuario:false,
-            mostrarDni:false,
-            mostrarCampos:false,
-            sedes:'',
-            usuarios:{
-               type:'',
-               dni:'',
-               nombre:'',
-               apellidos:'',
-               telefono_movil:'',
-               sedes:'',
-               email:'',
-               usuario:'',
-               password:'',
-               confir_password:'',
-               genero:'',
-               tipo:'',
-               especialidad:'',
-               colegiatura: '',
-               
-            },
-            vespecialidad:false,
-            vcolegiatura:false,
-            vnombre:false,
-            vapellidos:false,
-            vtelefono_movil:false,
-            vemail:false,
-            vsedes:false,
-            vtipo:false,
-            vusuario:false,
-            vpassword:false,
-            vconfir_password:false,
-            vgenero:false,
-
+            errorProducto:{},
+            id_categoria:''
          }
       },
       computed:{
@@ -224,15 +331,30 @@
                alert("A ocurrido un error.");
             });
          },
+         traerCategorias(){
+            let _this = this;
+
+            var url = '/categorias/traerCategoria';
+            axios.get(url).then(function (response) {
+               var respuesta = response.data;
+               console.log(respuesta)
+
+               _this.arrayCategorias = respuesta;
+            }).catch(function (error) {
+               alert("A ocurrido un error.");
+            });
+         },
 
          cambiarPagina(page,buscar){
             let me = this;
             //Actualiza la pagina actual
             me.pagination.current_page = page;
             //Enviar la peticion para visualizar la data de esa página
-            me.traerUsuarios(page,buscar);
+            me.traerProductos(page,buscar);
          },
+
          verificar(name,sig,t=0){
+            console.log(sig)
             var _this = this;
             this.$validator.validate(name).then(function(valid){
                if (valid){
@@ -242,436 +364,124 @@
                }
             })
          },
-         abrirModal(titulo,item){
-            console.log(item)
+         abrirModal(accion,item){
             var _this = this
-            this.titulo = titulo;
-            this.mostrarUsuario=true
-
-            if (titulo=='Nuevo Usuario') {
-               this.id_sede = "";
-               this.nombreSede = "";
-               this.direccion = "";
-               this.telefono = "";
+            this.mostrarModal=true;
+            if (accion=='REGISTRAR') {
+               this.titulo='Crear Producto'
+               this.idProducto = "";
+               this.id_categoria = "";
+               this.nombre_producto = "";
+               this.descripcion_producto = "";
 
                setTimeout(function(){
-                  console.log(_this.$refs)
-                  _this.$refs.tipo_documento.focus();
+                  _this.vid_categoria=true;
+                  _this.$validator.validate('id_categoria')
+                  _this.$refs.id_categoria.focus();
                },500)
 
             }else{
-               this.nombreSede = item.nombre_sede;
-               this.direccion = item.direccion_sede;
-               this.telefono = item.telefono_sede;
-               this.id_sede = item.id;
+               console.log
+               this.titulo='Actulizar Producto'
+               this.idProducto = item.id;
+               this.nombre_producto = item.nombre_producto;
+               this.descripcion_producto = item.descripcion_producto;
+               _this.vnombre_producto=true;
+               _this.vdescripcion_producto=true;
+               _this.$validator.validate()
             }
             
          },
          cerrarModal(){
+            this.idProducto = "";
+            this.nombre_producto = "";
+            this.descripcion_producto = "";
+            this.mostrarModal=false;
             this.titulo = "";
-            this.nombreSede = "";
-            this.direccion = "";
-            this.telefono = "";
-            this.id_sede = "";
-            this.mostrarUsuario=false
-            this.usuarios = {
-               type:'',
-               dni:'',
-               nombre:'',
-               apellidos:'',
-               telefono_movil:'',
-               sedes:'',
-               email:'',
-               usuario:'',
-               password:'',
-               confir_password:'',
-               genero:'',
-               tipo:'',
-               especialidad:'',
-               colegiatura: '',
-               
-            }
-            this.vespecialidad=false
-            this.vcolegiatura=false
-            this.vnombre=false
-            this.vapellidos=false
-            this.vtelefono_movil=false
-            this.vemail=false
-            this.vsedes=false
-            this.vtipo=false
-            this.vusuario=false
-            this.vpassword=false
-            this.vconfir_password=false
-            this.vgenero=false
-            this.mostrarDni =false
-            this.mostrarCampos =false
+
+            this.vdescripcion_producto=false
+            this.vnombre_producto=false
+            this.vid_categoria=false
+            this.vprecio=false
+            this.vdescuento=false
+            this.vimagen=false
 
          },
-         guardarUsuario(){
+         eliminarProducto(id){
+            var _this = this;
+            if(confirm("Seguro que se puede eliminar el Producto?")){
+
+               axios.delete(`/productos/${id}`)
+                  .then(function (response) {
+                        
+                     if(!response.data.success){
+                        alert(response.data.error);
+                     }else{
+                        alert(response.data.data)
+                        _this.traerProductos(1,'');
+                     }
+
+                  }).catch(function (error) {
+                     alert("A ocurrido un error.");
+                  });
+            }
+         },
+         guardarProducto(){
             var _this = this;
 
             this.$validator.validate().then(function(valid){
-               _this.vespecialidad=true;
-               _this.vcolegiatura=true;
-               _this.vnombre=true;
-               _this.vapellidos=true;
-               _this.vtelefono_movil=true;
-               _this.vemail=true;
-               _this.vsedes=true;
-               _this.vtipo=true;
-               _this.vusuario=true;
-               _this.vpassword=true;
-               _this.vconfir_password=true;
+               _this.vdescripcion_producto=true
+               _this.vnombre_producto=true
+               _this.vid_categoria=true
+               _this.vprecio=true
+               _this.vdescuento=true
+               _this.vimagen=true
+
+               _this.registrandoProducto=true;
+               _this.disabledRegistrando=true;
+
                if (valid){
-                  var formData = new FormData();
-                  console.log(_this.$refs.foto.files)
-                  if (_this.$refs.foto.files) {
-                     formData.append('foto', _this.$refs.foto.files[0]);
-                  }else{
-                     formData.append('foto', _this.$refs.foto.files);
+                  let data = {
+                     'nombre_producto':_this.nombre_producto,
+                     'precio':_this.precio,
+                     'descuento':_this.descuento,
+                     'imagen':_this.imagen,
+                     'descripcion_producto':_this.descripcion_producto,
+                     'categoria_id':_this.id_categoria
                   }
-                  formData.append('datos', JSON.stringify(_this.usuarios))
-                  formData.append('id_usuario', _this.id_usuario)
-                  alert(_this.id_usuario)
-                  if (_this.id_usuario) {
-                     var url = '/ajax/usuarios/editar_usuarios';
-                  }else{
-                     var url = '/ajax/usuarios/crear_usuarios';
+
+                  var url = '/productos';
+                  var method = 'POST';//metodo para registrar 
+
+                  if(_this.idProducto){
+                     url = `/productos/${_this.idProducto}`;
+                     method = 'PUT'; //metodo para actualiar 
                   }
-                  axios.post(
+
+                  axios({
+                     method,
                      url,
-                     formData,
-                     {
-                        headers: {
-                           'Content-Type': 'multipart/form-data'
-                           }
-                        }
-                     ).then(function (response) {
-                     console.log(response.data)
+                     data
+                     }).then(function (response) {
+                     
                      if(!response.data.success){
                         alert(response.data.error);
                      }else{
                         _this.cerrarModal();
-                        _this.traerUsuarios(1,'');
-                        _this.usuarios={
-                              type:'',
-                              dni:'',
-                              nombre:'',
-                              apellidos:'',
-                              telefono_movil:'',
-                              sedes:'',
-                              email:'',
-                              usuario:'',
-                              password:'',
-                              confir_password:'',
-                              genero:'',
-                              tipo:'',
-                              especialidad:'',
-                              colegiatura: '',
-                              
-                           }
-                           _this.vespecialidad=false;
-                           _this.vcolegiatura=false;
-                           _this.vnombre=false;
-                           _this.vapellidos=false;
-                           _this.vtelefono_movil=false;
-                           _this.vemail=false;
-                           _this.vsedes=false;
-                           _this.vtipo=false;
-                           _this.vusuario=false;
-                           _this.vpassword=false;
-                           _this.vconfir_password=false;
-                           _this.vgenero=false;
-                           _this.mostrarDni =false
-                           _this.mostrarCampos =false
-
-                        alert("Usuario creado")
+                        _this.traerProductos(1,'');
+                        alert(response.data.data)
                      }
 
                   }).catch(function (error) {
-                     _this.registrandoPaciente = false;
+                     _this.registrandoProducto = false;
                      _this.disabledRegistrando = true;
-                     alert("Ah ocurrido un error.");
+                     _this.errorProducto = error;
+                     alert("A ocurrido un error.");
                   });
                }
             })
-
-           
-         },
-         buscarUsuario:function(){
-            var _this = this
-
-            this.usuarios.nombre = "";
-            this.usuarios.apellidos = "";
-            this.usuarios.telefono_movil = "";
-            this.usuarios.direccion = "";
-
-            this.buscandoUsuarios = true;
-            this.disabledBuscar = true;
-            var url = `/usuarios/ver/dni/${this.usuarios.dni}`;
-            var urlConsulta = `/SunatPHP/consulta.php`;
-            axios.get(url).then(function (response) {
-               var data = response.data;
-               if(data.dni){
-                  alert('Este DNI ya se encuentra registrado!');
-                  _this.buscandoUsuario = false;
-                  _this.disabledBuscar = false;
-                  return;
-               }
-               if (_this.usuarios.dni.length==11) {
-                  $.ajax({
-                     type:"POST",
-                     url:'/SunatPHP/consulta.php',
-                     dataType:"json",
-                     data:{nruc:_this.usuarios.dni.trim()},
-                     success:function(respuesta){
-                        _this.mostrarCampos = true;
-                        if(respuesta.success==true){
-                           
-                           var arrNombre = respuesta.result.RazonSocial.split(" ");
-                           var nombres = ""; var apellidos = "";
-
-                           for (var i = 0; i < arrNombre.length; i++) {
-                              if(i<=1){
-                                 apellidos += ' '+arrNombre[i];
-                              }else{
-                                 nombres += ' '+arrNombre[i];
-                              }
-                           }
-
-                           for (var item in respuesta){
-                              var rasonsocial=respuesta[item].RazonSocial;
-                              var telefonos=respuesta[item].Telefono;
-                              var adress=respuesta[item].Direccion;
-                              var state=respuesta[item].Estado;
-                           }
-
-                           _this.usuarios.nombre = nombres;
-                           _this.usuarios.apellidos = apellidos;
-                           _this.usuarios.usuario = telefonos;
-                           
-                           _this.buscandoUsuario = false;
-                           _this.disabledBuscar = false;
-
-                           _this.vnombre=true
-                           _this.vapellidos=true
-                           _this.vtelefono_movil=true
-                           _this.vusuario=true
-
-                           _this.$validator.validate("nombre");
-                           _this.$validator.validate("apellidos");
-                           _this.$validator.validate("telefono_movil");
-                           _this.$validator.validate("usuario");
-                           _this.$refs.usuario.focus();
-                           return;
-                        }
-                        
-                        _this.buscandoUsuario = false;
-                        _this.disabledBuscar = false;
-                        _this.vnombre=true;
-                        _this.$validator.validate("nombre");
-                        _this.$refs.nombre.focus();
-
-                     }
-                  })
-               }
-               if (_this.usuarios.dni.length==8) {
-                  $.ajax({
-                     type:"POST",
-                     url:'/ReniecPHP/example/consulta.php',
-                     dataType:"json",
-                     data:{ndni:_this.usuarios.dni.trim()},
-                     success:function(respuesta){
-                        _this.mostrarCampos = true;
-                        if(respuesta.success==true){
-
-                           console.log(respuesta)
-                           if(respuesta.source=='reniec'){
-                              var nombres = respuesta.result.Nombres;
-                              var apellidos = respuesta.result.apellidos;
-                           }
-                           if(respuesta.source=='essalud'){
-                              var nombres = respuesta.result.Nombres;
-                              var apellidos = respuesta.result.ApellidoPaterno +" "+ respuesta.result.ApellidoMaterno;
-                           }
-                           if (nombres.trim()!='' || apellidos.trim()!=''){
-                              _this.usuarios.nombre = nombres;
-                              _this.usuarios.apellidos = apellidos;
-                              _this.buscandoUsuario = false;
-                              _this.disabledBuscar = false;
-
-                              _this.vnombre=true
-                              _this.vapellidos=true
-                              _this.vfecha_nacimiento=true
-
-                              setTimeout(function(){
-                                 _this.$validator.validate("nombre");
-                                 _this.$validator.validate("apellidos");
-                                 _this.$validator.validate("telefono_movil");
-                                 _this.$refs.telefono_movil.focus();
-                              },100)
-                              return;   
-                           }else{
-                              _this.buscandoUsuario = false;
-                              _this.disabledBuscar = false;
-                              _this.vnombre=true;
-                              setTimeout(function(){
-                                 _this.$validator.validate("nombre");
-                                 _this.$refs.nombre.focus();
-                              },100)
-                           }                     
-                        }
-                     }
-                  })
-               }
-            }).catch(function (error) {
-               _this.buscandoUsuario = false;
-               _this.disabledBuscar = false;
-               alert("Ah ocurrido un error.");
-            });
-         },
-         verificarDni(){
-            var _this= this
-            this.$validator.validate('dni').then(function(valid){
-               if (valid) {
-                  _this.disabledBuscar=false;
-                  if (_this.usuarios.type!='dni') {
-                     _this.mostrarCampos=true;
-                     setTimeout(function(){
-                        _this.vnombre=true
-                        _this.$refs.nombre.focus();
-                        _this.$validator.validate("nombre");
-                     },100);
-                     
-                  }else{
-                     _this.buscarUsuario()
-                  }
-               }else{
-                  _this.disabledBuscar=true;
-               }
-            })
-         },
-         mostrarCampoDni(){
-            var _this= this
-            if (this.usuarios.type==''){
-               this.mostrarDni=false;
-            }else{
-               this.mostrarDni=true;
-            }
-            setTimeout(function(){
-               _this.verificarDni();
-               _this.$refs.dni.focus();
-            },100);
-         },
-         limpiarFirma() {
-            this.$refs.signaturePad.clearSignature()
-            console.log(this.$refs.signaturePad)
-            //this.$refs.signaturePad.clear();
-         },
-         firmarMostrar(id,titulo){
-            this.mostrarFirmas=true         },
-         cerrarFirma(){
-            this.mostrarFirmas=false;
-            this.$refs.signaturePad.clearSignature();
-         },
-         guardarFirma() { 
-            // console.log(this.$refs.signaturePad);
-            var _this = this
-            const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-            console.log(isEmpty);
-            console.log(data);
-
-            if (!isEmpty) {
-               var firmas = this.firmas
-                  firmas[this.id_consentimiento] = {
-                  firma: data
-               }
-               const base64 = data
-               fetch(base64)
-               .then(res => res.blob())
-               .then(blob => {
-                  const formData = new FormData();
-                  const file = new File([blob], "firma_"+this.id_consentimiento+"_"+this.id_paciente+".jpeg");
-                  formData.append('firma', file);
-                  var url = "/usuario/subir/imagen-firma/";
-
-                  axios.post(
-                     url,
-                     formData,
-                     {
-                        headers: {
-                           'Content-Type': 'multipart/form-data'
-                           }
-                        }
-                     ).then(function (response){
-                     console.log("response")
-                     console.log(response)
-                     console.log("response")
-                     if(response.data.success){
-                        _this.cerrarFirma();
-                     }else{
-                        alert(response.data.error)
-                     }
-                  }).catch(function (error) {
-                     console.log(error);
-                     alert("Ah ocurrido un error.");
-                  });
-               })
-
-            }else{
-               alert("La firma no puede estar vacia")
-            }
-         },
-         verImg(item){
-            if (item.logo) {
-               return "/imagenes/imagenesUsuarios/"+item.logo
-            }
-
-            if (item.genero=='masculino') {
-               return "/img/medico1.png"
-            }else{
-               return "/img/medico2.png"
-            }
-         },
-         cambiarEstado(estado,item,index){
-            var url = "/usuario/cambiarEstado";
-            var _this = this
-            var data = {
-               id: item.id,
-               estado:estado,
-            }
-            axios.post(url,data).then(function (response){
-               console.log(response);
-               if (response.data.success) {
-                  var users = _this.arrayUsuarios;
-                  console.log(users);
-                  users[index].active = estado
-                  console.log(users);
-                  _this.arrayUsuarios = users
-               }
-
-            }).catch(function (error) {
-               console.log(error);
-               alert("Ah ocurrido un error.");
-            });
-         },
-         EditarUsuario(item){
-            console.log(item)
-            this.mostrarUsuario=true
-            this.id_usuario=item.id
-            this.usuarios = {
-               dni:item.dni,
-               nombre:item.name,
-               telefono_movil:item.telefono,
-               sedes:item.sede_id,
-               email:item.email,
-               usuario:item.username,
-               genero:item.genero,
-               colegiatura:item.colegiatura,
-               especialidad:item.especialidad,
-               tipo:item.cop
-            }
          }
+
       }
    }
 </script>
@@ -683,10 +493,9 @@
       height: auto;
       margin: auto;
    }
-   .mostrar_usuarios{
+   .mostrar_modal{
       display: list-item !important;
       opacity: 1 !important;
-      /*position: absolute !important;*/
       background-color: #3c29297a !important;
       overflow-x: hidden;
       overflow-y: auto;
@@ -713,14 +522,6 @@
    .form-control.is-valid, .was-validated .form-control:valid{
       background-image: none;
    }
-   .mostrar_firma{
-      display: list-item !important;
-      opacity: 1 !important;
-      /*position: absolute !important;*/
-      background-color: #3c29297a !important;
-      overflow-x: hidden;
-      overflow-y: auto;
-      z-index: 1072;
-   }
+   
 </style>
 

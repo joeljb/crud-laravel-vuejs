@@ -50,6 +50,7 @@ Route::group(['middleware' => AuthAdmin::class],function () {
    Route::get('/productos/traer', 'ProductosController@traer')->name('productos.traer');
    
    Route::get('/categorias/traer', 'CategoriasController@traer')->name('categorias.traer');
+   Route::get('/categorias/traerCategoria', 'CategoriasController@traerCategoria')->name('categorias.traerCategoria');
    
    Route::resources([
       'productos' => 'ProductosController',

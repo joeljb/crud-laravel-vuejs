@@ -16,7 +16,6 @@ use App\Http\Middleware\AuthAdmin;
 //    return view('welcome');
 // });
 
-Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('index');
 Route::get('/contruccion', 'HomeController@contruccion')->name('contruccion');
@@ -27,10 +26,6 @@ Route::get('/contruccion', 'HomeController@contruccion')->name('contruccion');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
- 
-// Registration Routes...
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register')->middleware(['auth',AuthAdmin::class]);
-Route::post('register', 'Auth\RegisterController@register')->middleware(['auth',AuthAdmin::class]);
  
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -46,13 +41,19 @@ Route::emailVerification();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/categorias/traer', 'CategoriasController@traer')->name('categorias.traer');
-Route::post('/categoria/crear', 'CategoriasController@store')->name('categoria.crear');
-Route::resource('/categorias', 'CategoriasController');
+Route::group(['middleware' => AuthAdmin::class],function () {
 
+   Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+   Route::post('register', 'Auth\RegisterController@register');
 
-Route::get('/productos/traer', 'ProductosController@traer')->name('productos.traer');
-
-
-Route::resource('/productos', 'ProductosController');
+   
+   Route::get('/productos/traer', 'ProductosController@traer')->name('productos.traer');
+   
+   Route::get('/categorias/traer', 'CategoriasController@traer')->name('categorias.traer');
+   
+   Route::resources([
+      'productos' => 'ProductosController',
+      'categorias' => 'CategoriasController'
+   ]);
+});
 

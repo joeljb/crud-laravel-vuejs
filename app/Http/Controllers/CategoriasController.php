@@ -53,7 +53,7 @@ class CategoriasController extends Controller
             $categoria->descripcion_categoria = $request->input('descripcion_categoria');
    
             DB::transaction(function() use ($categoria){
-                $categoria->save();
+               $categoria->save();
             });
 
             return ["success" => true, "data"=>"Categoria Creada"];
@@ -94,7 +94,34 @@ class CategoriasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       if(!\request()->ajax())  return abort(401);
+         $validator =  Validator::make($request->all(), [
+            'nombre_categoria' => 'required',
+            'descripcion_categoria' => 'required'
+         ]);
+
+         if($validator->fails()){
+            return response(['errors' => $validator->errors()],422);
+         }
+
+         try{
+            $categoria = Categoria::find($id);
+            if($categoria){
+               $categoria->nombre_categoria = $request->input('nombre_categoria');
+               $categoria->descripcion_categoria = $request->input('descripcion_categoria');
+      
+               DB::transaction(function() use ($categoria){
+                  $categoria->save();
+               });
+
+               return ["success" => true, "data"=>"Categoria Actualizada"];
+            }else{
+               return ["success" => false, "error"=>"Id de la categoria no encontrada"];
+            }
+
+         }catch (\Exception $e){
+               return abort(401,$e);
+         }
     }
 
     /**
@@ -105,7 +132,22 @@ class CategoriasController extends Controller
      */
       public function destroy($id)
       {
-        //
+         if(!\request()->ajax())  return abort(401);
+
+         try{
+
+            $categoria = Categoria::find($id);
+
+            if($categoria){
+               $categoria->delete();
+               return ["success" => true, "data"=>"Categoria Eliminada"];
+            }else{
+               return ["success" => false, "error"=>"Id de la categoria no encontrada"];
+            }
+
+         }catch (\Exception $e){
+               return abort(401,$e);
+         }
       }
    public function traer(Request $request)
    {
@@ -113,9 +155,10 @@ class CategoriasController extends Controller
       $buscar = $request->buscar;
 
       if($buscar == ''){
-         $categorias = Categoria::paginate(5);
+         $categorias = Categoria::orderBy('id','DESC')->paginate(5);
       }else{
-         $categorias = Producto::where('nombre_categoria','LIKE','%' . $buscar . '%')
+         $categorias = Categoria::where('nombre_categoria','LIKE','%' . $buscar . '%')
+         ->orderBy('id','DESC')
          ->paginate(5);
       }
 

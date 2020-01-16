@@ -5,7 +5,7 @@ Usando Laravel 5.8
 
 3. Usar database seeds para crear el primer usario con email admin@admin.com y el password "password"  --- listo usuario ADMNISTRADOR admin@admin.com Y password 12356
 
-4. Creación de un CRUD (Crear, Leer, Actualizar, Eliminar) para dos tablas relacionadas productos y categorías
+4. Creación de un CRUD (Crear, Leer, Actualizar, Eliminar) para dos tablas relacionadas productos y categorías ---- listo fue creado
 
 5. La tabla de productos debe tener Nombre (Requerido), descripción, imagen (Mínimo 300 x 300), precio (Requerido), descuento y una llave foranea con el id de la categoría (Requerida)  ---- listo ya estan requeridos
 

@@ -56,7 +56,7 @@
                      <tbody>
                      <tr v-for="(producto, index) in arrayProductos">
                         <td v-text="index+1"></td>
-                        <td v-text="producto.categoria.nombre_categoriaguardar"></td>
+                        <td v-text="producto.categoria.nombre_categoria"></td>
                         <td v-text="producto.nombre_producto"></td>
                         <td v-text="producto.descripcion_producto"></td>
                         <td v-text="producto.precio"></td>
@@ -143,7 +143,7 @@
                         v-model="nombre_producto" 
                         placeholder="Ingresar Nombre Producto" 
                         v-validate="{ required: true}" 
-                        :class="vnombre_producto?{ 'is-invalid': errors.has('nombre_producto'), 'is-valid': !errors.has('nombre_producto')}:null" required @keyup="verificar('nombre_producto','descripcion_producto')">
+                        :class="vnombre_producto?{ 'is-invalid': errors.has('nombre_producto'), 'is-valid': !errors.has('nombre_producto')}:null" required @keyup="verificar('nombre_producto','precio')">
                         <div v-if="errors.has('nombre_producto')">
                            <span class="help-block text-danger" v-text="errors.first('nombre_producto')"></span>
                         </div>
@@ -156,14 +156,15 @@
                   <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
                      <label>Nombre Precio</label>
                      <input 
-                        type="text" 
+                        type="number" 
+                        step="0.00"
                         name="precio" 
                         ref="precio" 
                         class="form-control" 
                         v-model="precio" 
-                        placeholder="Ingresar Nombre Producto" 
+                        placeholder="1.00" 
                         v-validate="{ required: true}" 
-                        :class="vprecio?{ 'is-invalid': errors.has('precio'), 'is-valid': !errors.has('precio')}:null" required @keyup="verificar('precio','descripcion_producto')">
+                        :class="vprecio?{ 'is-invalid': errors.has('precio'), 'is-valid': !errors.has('precio')}:null" required @keyup="verificar('precio','descuento')">
                         <div v-if="errors.has('precio')">
                            <span class="help-block text-danger" v-text="errors.first('precio')"></span>
                         </div>
@@ -174,14 +175,15 @@
                         </div>
                   </div>
                    <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
-                     <label>Nombre Precio</label>
+                     <label>Descuento</label>
                      <input 
-                        type="text" 
+                        type="number" 
+                        step="0.00"
                         name="descuento" 
                         ref="descuento" 
                         class="form-control" 
                         v-model="descuento" 
-                        placeholder="Ingresar Nombre Producto" 
+                        placeholder="0.00" 
                         v-validate="{ required: true}" 
                         :class="vdescuento?{ 'is-invalid': errors.has('descuento'), 'is-valid': !errors.has('descuento')}:null" required @keyup="verificar('descuento','descripcion_producto')">
                         <div v-if="errors.has('descuento')">
@@ -203,7 +205,7 @@
                         v-model="descripcion_producto" 
                         placeholder="Ingresar Descripcion" 
                         v-validate="{ required: true}" 
-                        :class="vdescripcion_producto?{ 'is-invalid': errors.has('descripcion_producto'), 'is-valid': !errors.has('descripcion_producto')}:null" required @keyup="verificar('descripcion_producto','descripcion_producto')"
+                        :class="vdescripcion_producto?{ 'is-invalid': errors.has('descripcion_producto'), 'is-valid': !errors.has('descripcion_producto')}:null" required @keyup="verificar('descripcion_producto','imagen')"
                      >
                         <div v-if="errors.has('descripcion_producto')">
                            <span class="help-block text-danger" v-text="errors.first('descripcion_producto')"></span>
@@ -220,8 +222,8 @@
                         type="text" 
                         name="imagen" 
                         ref="imagen" 
+                        v-model="imagen"
                         class="form-control" 
-                        v-model="imagen" 
                         placeholder="Ingresar Descripcion" 
                         v-validate="{ required: true}" 
                         :class="vimagen?{ 'is-invalid': errors.has('imagen'), 'is-valid': !errors.has('imagen')}:null" required @keyup="verificar('imagen','imagen')"

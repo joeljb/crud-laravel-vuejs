@@ -2330,6 +2330,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "productos",
   created: function created() {
@@ -50443,7 +50445,7 @@ var render = function() {
                         _c("td", {
                           domProps: {
                             textContent: _vm._s(
-                              producto.categoria.nombre_categoriaguardar
+                              producto.categoria.nombre_categoria
                             )
                           }
                         }),
@@ -50792,10 +50794,7 @@ var render = function() {
                         domProps: { value: _vm.nombre_producto },
                         on: {
                           keyup: function($event) {
-                            return _vm.verificar(
-                              "nombre_producto",
-                              "descripcion_producto"
-                            )
+                            return _vm.verificar("nombre_producto", "precio")
                           },
                           input: function($event) {
                             if ($event.target.composing) {
@@ -50870,18 +50869,16 @@ var render = function() {
                             }
                           : null,
                         attrs: {
-                          type: "text",
+                          type: "number",
+                          step: "0.00",
                           name: "precio",
-                          placeholder: "Ingresar Nombre Producto",
+                          placeholder: "1.00",
                           required: ""
                         },
                         domProps: { value: _vm.precio },
                         on: {
                           keyup: function($event) {
-                            return _vm.verificar(
-                              "precio",
-                              "descripcion_producto"
-                            )
+                            return _vm.verificar("precio", "descuento")
                           },
                           input: function($event) {
                             if ($event.target.composing) {
@@ -50926,7 +50923,7 @@ var render = function() {
                       staticClass: "col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6"
                     },
                     [
-                      _c("label", [_vm._v("Nombre Precio")]),
+                      _c("label", [_vm._v("Descuento")]),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -50952,9 +50949,10 @@ var render = function() {
                             }
                           : null,
                         attrs: {
-                          type: "text",
+                          type: "number",
+                          step: "0.00",
                           name: "descuento",
-                          placeholder: "Ingresar Nombre Producto",
+                          placeholder: "0.00",
                           required: ""
                         },
                         domProps: { value: _vm.descuento },
@@ -51052,7 +51050,7 @@ var render = function() {
                           keyup: function($event) {
                             return _vm.verificar(
                               "descripcion_producto",
-                              "descripcion_producto"
+                              "imagen"
                             )
                           },
                           input: function($event) {

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Categoria;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Exports\CategoriaExport;
+use Excel;
 
 class CategoriasController extends Controller
 {
@@ -179,4 +181,13 @@ class CategoriasController extends Controller
       if(!\request()->ajax())  return abort(401);
       return Categoria::get();
    }
+   
+   
+   public function exportarExcel(Request $request)
+   {
+
+      dd("llegoa qui");
+      // return Excel::download(new CategoriaExport(), 'categorias.xlsx');
+   }
+
 }

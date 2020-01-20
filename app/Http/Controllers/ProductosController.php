@@ -37,22 +37,33 @@ class ProductosController extends Controller
      */
    public function store(StoreProducto $request)
    {
+
       if(!\request()->ajax())  return abort(401);
       try{
-         $producto = new Producto();
+         if($request->hasFile('imagen')){ //validamos si existe algún archivo en el "Request"
+            #Almacenando la imagen, store indicando la ruta
+            $url = $request->file('imagen')->store('public/productos'); 
+            $imagen = str_replace('public/','',$url);
+            $producto = new Producto();
 
-         $producto->nombre_producto = $request->input('nombre_producto');
-         $producto->descripcion_producto = $request->input('descripcion_producto');
-         $producto->categoria_id = $request->input('categoria_id');
-         $producto->imagen = $request->input('imagen');
-         $producto->precio = $request->input('precio');
-         $producto->descuento = $request->input('descuento');
+            $producto->nombre_producto = $request->input('nombre_producto');
+            $producto->descripcion_producto = $request->input('descripcion_producto');
+            $producto->categoria_id = $request->input('categoria_id');
+            $producto->imagen = $imagen;
+            $producto->precio = $request->input('precio');
+            $producto->descuento = $request->input('descuento');
 
-         DB::transaction(function() use ($producto){
-            $producto->save();
-         });
+            DB::transaction(function() use ($producto){
+               $producto->save();
+            });
 
-         return ["success" => true, "data"=>"Producto Creada"];
+            return ["success" => true, "data"=>"Producto Creada"];
+
+  
+        } else {
+            return ["success" => false, "error"=>"Imagen no encontrada"];
+        }
+
 
       }catch (\Exception $e){
          return abort(401,$e);

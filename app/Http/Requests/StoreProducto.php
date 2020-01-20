@@ -24,12 +24,13 @@ class StoreProducto extends FormRequest
     public function rules()
     {
       return [
-         'categoria_id' => 'required|integer',
-         'nombre_producto' => 'required',
-         'descripcion_producto' => 'required',
-         'imagen' => 'required',
-         'precio' => 'required|numeric',
-         'descuento' => 'required|numeric',
+         "imagen" => "required|image",
+         'imagen' => 'dimensions:min_width=300,min_height=300',
+         'nombre_producto'=>"required|string|max:255",
+         'descripcion_producto'=>"required|string|max:255",
+         'precio'=>"required|numeric",
+         'descuento'=>"required|numeric",
+         'categoria_id'=>"required|integer",
       ];
     }
 }

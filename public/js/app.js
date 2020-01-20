@@ -1863,6 +1863,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "categorias",
   created: function created() {
@@ -1889,7 +1896,8 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      errorCategoria: {}
+      errorCategoria: {},
+      urlExcel: ''
     };
   },
   computed: {
@@ -1935,6 +1943,7 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert("A ocurrido un error.");
       });
+      _this.urlExcel = '/categorias/excel';
     },
     cambiarPagina: function cambiarPagina(page, buscar) {
       var me = this; //Actualiza la pagina actual
@@ -2074,6 +2083,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2522,14 +2534,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.disabledRegistrando = true;
 
         if (valid) {
-          var data = {
-            'nombre_producto': _this.nombre_producto,
-            'precio': _this.precio,
-            'descuento': _this.descuento,
-            'imagen': _this.imagen,
-            'descripcion_producto': _this.descripcion_producto,
-            'categoria_id': _this.id_categoria
-          };
+          var formData = new FormData();
+          console.log(_this.$refs.imagen.files[0]);
+          formData.append('imagen', _this.$refs.imagen.files[0]);
+          formData.append('nombre_producto', _this.nombre_producto);
+          formData.append('precio', _this.precio);
+          formData.append('descuento', _this.descuento);
+          formData.append('descripcion_producto', _this.descripcion_producto);
+          formData.append('categoria_id', _this.id_categoria);
           var url = '/productos';
           var method = 'POST'; //metodo para registrar 
 
@@ -2538,11 +2550,19 @@ __webpack_require__.r(__webpack_exports__);
             method = 'PUT'; //metodo para actualiar 
           }
 
+          console.log(formData);
           axios({
             method: method,
             url: url,
-            data: data
+            data: formData,
+            headers: {
+              "Content-Type": 'multipart/form-data'
+            }
           }).then(function (response) {
+            console.log("response");
+            console.log(response);
+            console.log("response");
+
             if (!response.data.success) {
               alert(response.data.error);
             } else {
@@ -2553,6 +2573,9 @@ __webpack_require__.r(__webpack_exports__);
               alert(response.data.data);
             }
           })["catch"](function (error) {
+            console.log("error");
+            console.log(error);
+            console.log("error");
             _this.registrandoProducto = false;
             _this.disabledRegistrando = true;
             _this.errorProducto = error;
@@ -49868,6 +49891,46 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
+              _c("div", { staticClass: "col-sm-2" }, [
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "btn btn-default btn-md waves-effect waves-light m-b-30",
+                    attrs: {
+                      href: _vm.urlExcel,
+                      title: "Imprimir",
+                      target: "_blank",
+                      "data-animation": "fadein",
+                      "data-plugin": "custommodal",
+                      "data-overlaySpeed": "200",
+                      "data-overlayColor": "#36404a"
+                    }
+                  },
+                  [_c("i", { staticClass: "fa fa-print" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "btn btn-default btn-md waves-effect waves-light m-b-30",
+                    attrs: {
+                      href: _vm.urlExcel,
+                      title: "Exportar a Excel",
+                      target: "_blank",
+                      "data-animation": "fadein",
+                      "data-plugin": "custommodal",
+                      "data-overlaySpeed": "200",
+                      "data-overlayColor": "#36404a"
+                    }
+                  },
+                  [_c("i", { staticClass: "fa fa-table" })]
+                )
+              ]),
+              _vm._v(" "),
               _c("div", { staticClass: "card-body" }, [
                 _c("table", { staticClass: "table table-bordered" }, [
                   _vm._m(2),
@@ -50441,6 +50504,16 @@ var render = function() {
                         _c("td", {
                           domProps: { textContent: _vm._s(index + 1) }
                         }),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-center" }, [
+                          _c("img", {
+                            attrs: {
+                              src: "storage/" + producto.imagen,
+                              width: "50",
+                              height: "50"
+                            }
+                          })
+                        ]),
                         _vm._v(" "),
                         _c("td", {
                           domProps: {
@@ -51106,12 +51179,6 @@ var render = function() {
                       _c("input", {
                         directives: [
                           {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.imagen,
-                            expression: "imagen"
-                          },
-                          {
                             name: "validate",
                             rawName: "v-validate",
                             value: { required: true },
@@ -51127,21 +51194,14 @@ var render = function() {
                             }
                           : null,
                         attrs: {
-                          type: "text",
+                          type: "file",
                           name: "imagen",
                           placeholder: "Ingresar Descripcion",
                           required: ""
                         },
-                        domProps: { value: _vm.imagen },
                         on: {
                           keyup: function($event) {
                             return _vm.verificar("imagen", "imagen")
-                          },
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.imagen = $event.target.value
                           }
                         }
                       }),
@@ -51246,6 +51306,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", { staticStyle: { width: "10px" } }, [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Imagen")]),
         _vm._v(" "),
         _c("th", [_vm._v("Categoria")]),
         _vm._v(" "),
@@ -63725,8 +63787,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/joeljb/dev/prueba_trabajo/prueba/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/joeljb/dev/prueba_trabajo/prueba/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/joeljb/dev/prueba_trabajo/crud-laravel-vuejs/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/joeljb/dev/prueba_trabajo/crud-laravel-vuejs/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

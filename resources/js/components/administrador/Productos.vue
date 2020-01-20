@@ -45,6 +45,7 @@
                      <thead>                  
                         <tr>
                            <th style="width: 10px">#</th>
+                           <th>Imagen</th>
                            <th>Categoria</th>
                            <th>Productos</th>
                            <th>Precio</th>
@@ -56,6 +57,9 @@
                      <tbody>
                      <tr v-for="(producto, index) in arrayProductos">
                         <td v-text="index+1"></td>
+                        <td class="text-center">
+                           <img :src="'storage/'+producto.imagen" width="50" height="50"/>
+                        </td>
                         <td v-text="producto.categoria.nombre_categoria"></td>
                         <td v-text="producto.nombre_producto"></td>
                         <td v-text="producto.descripcion_producto"></td>
@@ -219,10 +223,9 @@
                   <div class="col-12 col-sm-6 col-md-6 col-lg-6  col-xl-6">
                      <label>Imagen</label>
                      <input 
-                        type="text" 
+                        type="file" 
                         name="imagen" 
                         ref="imagen" 
-                        v-model="imagen"
                         class="form-control" 
                         placeholder="Ingresar Descripcion" 
                         v-validate="{ required: true}" 
@@ -430,7 +433,6 @@
          },
          guardarProducto(){
             var _this = this;
-
             this.$validator.validate().then(function(valid){
                _this.vdescripcion_producto=true
                _this.vnombre_producto=true
@@ -443,14 +445,19 @@
                _this.disabledRegistrando=true;
 
                if (valid){
-                  let data = {
-                     'nombre_producto':_this.nombre_producto,
-                     'precio':_this.precio,
-                     'descuento':_this.descuento,
-                     'imagen':_this.imagen,
-                     'descripcion_producto':_this.descripcion_producto,
-                     'categoria_id':_this.id_categoria
-                  }
+
+                  var formData = new FormData();
+
+                  console.log(_this.$refs.imagen.files[0])
+
+                  formData.append('imagen', _this.$refs.imagen.files[0]);
+                  formData.append('nombre_producto', _this.nombre_producto);
+                  formData.append('precio', _this.precio);
+                  formData.append('descuento', _this.descuento);
+                  formData.append('descripcion_producto', _this.descripcion_producto);
+
+                  formData.append('categoria_id', _this.id_categoria);
+                  
 
                   var url = '/productos';
                   var method = 'POST';//metodo para registrar 
@@ -460,11 +467,20 @@
                      method = 'PUT'; //metodo para actualiar 
                   }
 
+                  console.log(formData);
+
                   axios({
                      method,
                      url,
-                     data
+                     data:formData,
+                     headers:{
+                        "Content-Type":'multipart/form-data'
+                     }
                      }).then(function (response) {
+
+                        console.log("response")
+                        console.log(response)
+                        console.log("response")
                      
                      if(!response.data.success){
                         alert(response.data.error);
@@ -475,6 +491,9 @@
                      }
 
                   }).catch(function (error) {
+                     console.log("error")
+                     console.log(error)
+                     console.log("error")
                      _this.registrandoProducto = false;
                      _this.disabledRegistrando = true;
                      _this.errorProducto = error;

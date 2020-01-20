@@ -39,6 +39,13 @@
                         </div>
                      </div>
                   </div>
+                  <div class="col-sm-2">
+                     <br/>
+                     <a :href="urlExcel"  title="Imprimir" target="_blank" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+                        data-overlaySpeed="200" data-overlayColor="#36404a" ><i class="fa fa-print"></i></a>
+                     <a :href="urlExcel" title="Exportar a Excel" target="_blank" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+                        data-overlaySpeed="200" data-overlayColor="#36404a" ><i class="fa fa-table"></i></a>
+                  </div>
                <!-- /.card-header -->
                <div class="card-body">
                   <table class="table table-bordered">
@@ -193,7 +200,8 @@
                'to' : 0
             },
             offset: 3,
-            errorCategoria:{}
+            errorCategoria:{},
+            urlExcel:''
          }
       },
       computed:{
@@ -231,6 +239,8 @@
             }).catch(function (error) {
                alert("A ocurrido un error.");
             });
+
+             _this.urlExcel = '/categorias/excel';
          },
 
          cambiarPagina(page,buscar){
